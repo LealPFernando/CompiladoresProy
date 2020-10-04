@@ -2,24 +2,44 @@ from sly import Lexer
 from sly import Parser
 
 class Duck2020Lexer(Lexer):
-    tokens = { PROGRAM, ID, VAR, INT, FLOAT, ASSIGN, GT, LT, NT, IF, ELSE, PLUS, MINUS, TIMES, DIVIDE, CTEINT, CTEFLOAT, CTESTRING, PRINT }
+    tokens = { PROGRAM, ID, VAR, INT, FLOAT, ASSIGN, GT, LT, NT, IF, ELSE, PLUS, MINUS, TIMES, DIVIDE, CTEINT, CTEFLOAT, \
+    CTESTRING, PRINT, MAIN, CHAR, EQUAL, AND, OR, LINE, POINT, CIRCLE, ARC, PENUP, PENDOWN, COLOR, SIZE, CLEAR, DO, WHILE, \
+    FOR, TO}
 
     literals = { ';', ':', '(', ')', '{', '}',',' }
 
     ignore = ' \t'
 
     PROGRAM = r'program'
+    MAIN    = r'main'
     VAR     = r'var'
     INT     = r'int'
     FLOAT   = r'float'
+    CHAR    = r'char'
     PRINT   = r'print'
     IF      = r'if'
     ELSE    = r'else'
+    LINE    = r'line'
+    POINT   = r'point'
+    CIRCLE  = r'circle'
+    ARC     = r'arc'
+    PENUP   = r'penup'
+    PENDOWN = r'pendown'
+    COLOR   = r'color'
+    SIZE    = r'size'
+    CLEAR   = r'clear'
+    DO      = r'do'
+    WHILE   = r'while'
+    FOR     = r'for'
+    TO      = r'to'
     ID      = r'[a-zA-Z_][a-zA-Z0-9_]*'
     ASSIGN  = r'='
     GT      = r'>'
     LT      = r'<'
     NT      = r'<>'
+    EQUAL   = r'=='
+    AND     = r'&'
+    OR      = r'\|'
     PLUS    = r'\+'
     MINUS   = r'-'
     TIMES   = r'\*'

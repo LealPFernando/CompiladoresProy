@@ -1,0 +1,10 @@
+Utilizando el Little duck seria la declaracion de los tokens,
+Las reglas se haria desde 0 para evitar errores
+---------------------------------------------------
+4 Octubre 2020
+Realizar
+1)Agregar Tokens Faltantes
+2)Agregar reglas
+
+Puntos a Observar
+1)Falta la regla para el main
