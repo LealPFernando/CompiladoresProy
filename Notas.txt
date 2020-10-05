@@ -3,8 +3,102 @@ Las reglas se haria desde 0 para evitar errores
 ---------------------------------------------------
 4 Octubre 2020
 Realizar
-1)Agregar Tokens Faltantes
-2)Agregar reglas
+1)Agregar Tokens Faltantes [X]
+2)Agregar reglas           []
 
 Puntos a Observar
 1)Falta la regla para el main
+
+
+
+
+
+
+
+
+
+
+Backup
+@_('PROGRAM ID ";" vars bloque', 'PROGRAM ID ";" bloque')
+    def programa(self, p):
+        pass
+
+    @_('VAR vars2')
+    def vars(self, p):
+        pass
+
+    @_('ID vars3 ":" tipo ";" vars4')
+    def vars2(self, p):
+        pass
+
+    @_('"," ID vars3', '"," ID', '')
+    def vars3(self, p):
+        pass
+
+    @_('vars2', '')
+    def vars4(self, p):
+        pass
+
+    @_('INT', 'FLOAT')
+    def tipo(self, p):
+        pass
+
+    @_('"{" estatuto bloque2 "}"', '"{" "}"')
+    def bloque(self, p):
+        pass
+
+    @_('estatuto bloque2','estatuto', '')
+    def bloque2(self, p):
+        pass
+
+    @_('asignacion', 'condicion', 'escritura')
+    def estatuto(self, p):
+        pass
+
+    @_('ID ASSIGN expresion ";"')
+    def asignacion(self, p):
+        pass
+
+    @_('PRINT "(" escritura2 escritura3 ")" ";"')
+    def escritura(self, p):
+        pass
+
+    @_('expresion', 'CTESTRING')
+    def escritura2(self, p):
+        pass
+
+    @_('"," escritura2 escritura3', '"," escritura2', '')
+    def escritura3(self, p):
+        pass
+
+    @_('IF "(" expresion ")" bloque ELSE bloque ";"', 'IF "(" expresion ")" bloque ";"')
+    def condicion(self, p):
+        pass
+
+    @_('exp GT exp', 'exp LT exp', 'exp NT exp', 'exp')
+    def expresion(self, p):
+        pass
+
+    @_('termino exp2')
+    def exp(self, p):
+        pass
+
+    @_('PLUS exp', 'MINUS exp', '')
+    def exp2(self, p):
+        pass
+
+    @_('factor termino2')
+    def termino(self, p):
+        pass
+
+    @_('TIMES factor', 'DIVIDE factor', '')
+    def termino2(self, p):
+        pass
+
+    @_('"(" expresion ")"','PLUS varcte', 'MINUS varcte', 'varcte', '')
+    def factor(self, p):
+        pass
+
+    @_('ID', 'CTEINT', 'CTEFLOAT')
+    def varcte(self, p):
+        pass
