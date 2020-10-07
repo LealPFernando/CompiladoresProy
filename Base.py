@@ -56,6 +56,64 @@ class Duck2020Parser(Parser):
     
     tokens = Duck2020Lexer.tokens
 
+    
+
+    #Parametro
+    @_('tipos espresion')
+    def Parametro(self, p):
+        pass
+
+    #Estatuto
+    @_('lectura', 'escritura', 'asignacion', 'decision', 'repeticion', 'funcionesp')
+    def estatuto(self, p):
+        pass
+
+    #Lectura
+    @_('read "(" expresion lectura2 ")" ";"')
+    def lectura(self, p):
+        pass
+
+    @_('","expresion lectura 2', '')
+    def lectura2(self, p):
+        pass
+
+    #Escritura
+    @_('write "(" expresion escritura2 ")" ";"', 'write( CTESTRING escritura2 ")" ";"')
+    def escritura(self, p):
+        pass
+
+    @_('"," expresion escritura2', 'CTESTRING escritura2', '')
+    def escritura2(self, p):
+        pass
+
+    #Asignacion
+    @_('id ASSIGN expresion ";"')
+    def asignacion(self, p):
+        pass
+
+    #Repeticion
+    @_('rcondicional', 'rncondicional')
+    def repeticion(self, p):
+        pass
+
+    #RCondicional
+    @_('do "(" expresion ")" while "{" estatuto rcondicional2 "}"')
+    def rcondicional(self, p):
+        pass
+
+    @_('estatuto rcondicional2', '')
+    def rcondicional2(self, p):
+        pass
+
+    #RNCondicional
+    @_('for id = exp to exp do "{" estatuto rncondicional2 "}"')
+    def rncondicional(self, p):
+        pass
+
+    @_('estatuto rncondicional2', '')
+    def rncondicional2(self, p):
+        pass
+
     #Decision
     @_('if "(" expresion ")" "{" estatuto decision2 "}"', 'if "(" expresion ")" "{" estatuto decision2 "}" else "{" estatuto decision2 "}"')
     def decision(self, p):
@@ -67,7 +125,7 @@ class Duck2020Parser(Parser):
 
     #FuncionesESP
     @_('line "(" exp "," exp ")"', 'point "(" exp "," exp ")"', 'circle "(" exp ")"', 'arc "(" exp "," exp "," exp ")"', 'penup "(" ")"', 'pendown "(" ")"', 'color "(" exp ")"', 'size "(" exp ")"', 'clear "(" ")"')
-    def funcionesesp(self, p):
+    def funcioneesp(self, p):
         pass
 
     #Expresion
