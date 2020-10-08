@@ -4,7 +4,7 @@ from sly import Parser
 class Duck2020Lexer(Lexer):
     tokens = { PROGRAM, ID, VAR, INT, FLOAT, ASSIGN, GT, LT, NT, IF, ELSE, PLUS, MINUS, TIMES, DIVIDE, CTEINT, CTEFLOAT, \
     CTESTRING, CTECHAR, PRINT, MAIN, CHAR, EQUAL, AND, OR, LINE, POINT, CIRCLE, ARC, PENUP, PENDOWN, COLOR, SIZE, CLEAR, DO, WHILE, \
-    FOR, TO}
+    FOR, TO, VOID, MODULE, RETURN, READ, WRITE}
 
     literals = { ';', ':', '(', ')', '{', '}',',' }
 
@@ -17,6 +17,9 @@ class Duck2020Lexer(Lexer):
     FLOAT   = r'float'
     CHAR    = r'char'
     PRINT   = r'print'
+    VOID    = r'void'
+    MODULE  = r'module'
+    RETURN  = r'return'
     IF      = r'if'
     ELSE    = r'else'
     LINE    = r'line'
@@ -32,6 +35,8 @@ class Duck2020Lexer(Lexer):
     WHILE   = r'while'
     FOR     = r'for'
     TO      = r'to'
+    READ    = r'read'
+    WRITE   = r'write'
     ID      = r'[a-zA-Z_][a-zA-Z0-9_]*'
     ASSIGN  = r'='
     GT      = r'>'
@@ -56,11 +61,88 @@ class Duck2020Parser(Parser):
     
     tokens = Duck2020Lexer.tokens
 
-    
+    #Programa
+    @_('PROGRAM ID ";" vars programa2 mainfuncion', 'PROGRAM ID ";" programa2 mainfuncion')
+    def programa(self, p):
+        pass
+
+    @_('funcion programa2', '')
+    def programa2(self, p):
+        pass
+
+    #vars ---------------unreachable
+    @_('VAR vars2')
+    def vars(self, p):
+        pass
+
+    @_('tipos vars3', '')
+    def vars2(self, p):
+        pass
+
+    @_('":" ID vars4 ";" vars2', 'ID vars4 ";" vars2')
+    def vars3(self, p):
+        pass
+
+    @_('"," ID vars4', '')
+    def vars4(self, p):
+        pass
+
+    #Tipos  --------------Probable marca no reachable
+    @_('INT', 'FLOAT', 'CHAR')
+    def tipos(self, p):
+        pass
+
+    #Main --------------Faltan los diagramas
+    @_('MAIN "{" estatuto mainfuncion2 "}"')
+    def mainfuncion(self, p):
+        pass
+
+    @_('estatuto mainfuncion2', '')
+    def mainfuncion2(self, p):
+        pass
+
+    #Fucion
+    @_('funcionvoid', 'funciontipo')
+    def funcion(self, p):
+        pass
+
+    #FuncionVoid
+    @_('VOID MODULE ID "(" funcionvoid2 ")" vars "{" estatuto funcionvoid4 "}"', 'VOID MODULE ID "(" funcionvoid2 ")" "{" estatuto funcionvoid4 "}"')
+    def funcionvoid(self, p):
+        pass
+
+    @_('parametro funcionvoid3', '')
+    def funcionvoid2(self, p):
+        pass
+
+    @_('"," parametro funcionvoid3', '')
+    def funcionvoid3(self, p):
+        pass
+
+    @_('estatuto funciontipo4', '')
+    def funcionvoid4(self, p):
+        pass
+
+    #FuncionTipo
+    @_('tipos MODULE ID "(" funciontipo2 ")" vars "{" estatuto funciontipo4 RETURN expresion "}"', 'tipos MODULE ID "(" funcionvoid2 ")" "{" estatuto funciontipo4 "}"')
+    def funciontipo(self, p):
+        pass
+
+    @_('parametro funciontipo3', '')
+    def funciontipo2(self, p):
+        pass
+
+    @_('"," parametro funciontipo3', '')
+    def funciontipo3(self, p):
+        pass
+
+    @_('estatuto funciontipo4', '')
+    def funciontipo4(self, p):
+        pass
 
     #Parametro
-    @_('tipos espresion')
-    def Parametro(self, p):
+    @_('tipos expresion')
+    def parametro(self, p):
         pass
 
     #Estatuto
@@ -69,16 +151,16 @@ class Duck2020Parser(Parser):
         pass
 
     #Lectura
-    @_('read "(" expresion lectura2 ")" ";"')
+    @_('READ "(" expresion lectura2 ")" ";"')
     def lectura(self, p):
         pass
 
-    @_('","expresion lectura 2', '')
+    @_('"," expresion lectura2', '')
     def lectura2(self, p):
         pass
 
     #Escritura
-    @_('write "(" expresion escritura2 ")" ";"', 'write( CTESTRING escritura2 ")" ";"')
+    @_('WRITE "(" expresion escritura2 ")" ";"', 'WRITE "(" CTESTRING escritura2 ")" ";"')
     def escritura(self, p):
         pass
 
@@ -87,7 +169,7 @@ class Duck2020Parser(Parser):
         pass
 
     #Asignacion
-    @_('id ASSIGN expresion ";"')
+    @_('ID ASSIGN expresion ";"')
     def asignacion(self, p):
         pass
 
@@ -97,7 +179,7 @@ class Duck2020Parser(Parser):
         pass
 
     #RCondicional
-    @_('do "(" expresion ")" while "{" estatuto rcondicional2 "}"')
+    @_('DO "(" expresion ")" WHILE "{" estatuto rcondicional2 "}"')
     def rcondicional(self, p):
         pass
 
@@ -106,7 +188,7 @@ class Duck2020Parser(Parser):
         pass
 
     #RNCondicional
-    @_('for id = exp to exp do "{" estatuto rncondicional2 "}"')
+    @_('FOR ID ASSIGN exp TO exp DO "{" estatuto rncondicional2 "}"')
     def rncondicional(self, p):
         pass
 
@@ -115,7 +197,7 @@ class Duck2020Parser(Parser):
         pass
 
     #Decision
-    @_('if "(" expresion ")" "{" estatuto decision2 "}"', 'if "(" expresion ")" "{" estatuto decision2 "}" else "{" estatuto decision2 "}"')
+    @_('IF "(" expresion ")" "{" estatuto decision2 "}"', 'IF "(" expresion ")" "{" estatuto decision2 "}" ELSE "{" estatuto decision2 "}"')
     def decision(self, p):
         pass
 
@@ -124,8 +206,8 @@ class Duck2020Parser(Parser):
         pass
 
     #FuncionesESP
-    @_('line "(" exp "," exp ")"', 'point "(" exp "," exp ")"', 'circle "(" exp ")"', 'arc "(" exp "," exp "," exp ")"', 'penup "(" ")"', 'pendown "(" ")"', 'color "(" exp ")"', 'size "(" exp ")"', 'clear "(" ")"')
-    def funcioneesp(self, p):
+    @_('LINE "(" exp "," exp ")"', 'POINT "(" exp "," exp ")"', 'CIRCLE "(" exp ")"', 'ARC "(" exp "," exp "," exp ")"', 'PENUP "(" ")"', 'PENDOWN "(" ")"', 'COLOR "(" exp ")"', 'SIZE "(" exp ")"', 'CLEAR "(" ")"')
+    def funcionesp(self, p):
         pass
 
     #Expresion
