@@ -55,16 +55,38 @@ class Duck2020Lexer(Lexer):
     CTESTRING = r'\".*?\"'
 
 
+class semantic:
+    
+    def __init__(self)
+        self.semanticv = []
+        self.scope = "global"
+
+    def addSemantic(self, scope, name, value):
+        for data in self.semanticv:
+            if data[0] == scope:
+                if data[1] == name:
+                    return False
+        self.semanticv.append([scope, name, value])
+        return True
 
 
 class Duck2020Parser(Parser):
     
     tokens = Duck2020Lexer.tokens
+    
+    #[Scope, name, value]
 
     #Programa
-    @_('PROGRAM ID ";" vars programa2 mainfuncion', 'PROGRAM ID ";" programa2 mainfuncion')
+    @_('PROGRAM ID programa_accion ";" vars programa2 mainfuncion', 'PROGRAM ID programa_accion ";" programa2 mainfuncion')
     def programa(self, p):
+        print("Probando Id del programa", p.ID)
         pass
+
+    @_('')
+    def programa_accion(self, p):
+        print("buenas",p[-2])
+        semantica.addSemantic(p[-2], p[-1], p[-1])
+        print("Semantic", semantica.semanticv)
 
     @_('funcion programa2', '')
     def programa2(self, p):
@@ -284,6 +306,7 @@ if __name__ == '__main__':
 
     lexer = Duck2020Lexer()
     parser = Duck2020Parser()
+    semantica = semantic()
     # result = parser.parse(lexer.tokenize(masterline))
     # print(result)
     while True:
