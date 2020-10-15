@@ -66,37 +66,9 @@ cubo_semantico['float']['int']['/'] = "float"
 cubo_semantico['float']['float']['/'] = "float"
 
 
-print(cubo_semantico['int']['float']['+'])
-
-
-
-# class semantic:
-    
-#     def __init__(self):
-#         self.semanticv = []
-
-#     def addsem(self, scope, name, value):
-#         for data in self.semanticv:
-#             if data[0] == scope:
-#                 if data[1] == name:
-#                     return False
-#         self.semanticv.append([scope, name, value])
-#         return True
-
-
-
-# semantic = semantic()
-
-# if semantic.addsem("global", "x", 5):
-#     print(semantic.semanticv)
-
-# else:
-#     print("error")
-    
-
-# if semantic.addsem("global", "a", 5):
-#     print(semantic.semanticv)
-
-# else:
-#     print("error")
-
+def cube_check(node, left, right):
+    result = cubo_semantico[left][right][node]
+    if result == None:
+        return "error"
+    else:
+        return result

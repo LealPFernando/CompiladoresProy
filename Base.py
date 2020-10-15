@@ -57,22 +57,23 @@ class Duck2020Lexer(Lexer):
 
 class semantic:
     
-    def __init__(self)
+    def __init__(self):
         self.semanticv = []
         self.scope = "global"
 
-    def addSemantic(self, scope, name, value):
+    def addSemantic(self, scope, vtype, name, value):
         for data in self.semanticv:
             if data[0] == scope:
-                if data[1] == name:
+                if data[2] == name:
                     return False
-        self.semanticv.append([scope, name, value])
+        self.semanticv.append([scope, vtype, name, value])
         return True
 
 
 class Duck2020Parser(Parser):
     
     tokens = Duck2020Lexer.tokens
+    var_type = ""
     
     #[Scope, name, value]
 
@@ -84,9 +85,8 @@ class Duck2020Parser(Parser):
 
     @_('')
     def programa_accion(self, p):
-        print("buenas",p[-2])
-        semantica.addSemantic(p[-2], p[-1], p[-1])
-        print("Semantic", semantica.semanticv)
+        # print("buenas",p[-2])
+        semantica.addSemantic(semantica.scope, p[-2],p[-1], None)
 
     @_('funcion programa2', '')
     def programa2(self, p):
@@ -101,18 +101,24 @@ class Duck2020Parser(Parser):
     def vars2(self, p):
         pass
 
-    @_('":" ID vars4 ";" vars2', 'ID vars4 ";" vars2')
+    @_('":" ID var_accion vars4 ";" vars2', 'ID var_accion vars4 ";" vars2')
     def vars3(self, p):
         pass
 
-    @_('"," ID vars4', '')
+    @_('"," ID  var_accion vars4', '')
     def vars4(self, p):
         pass
 
     #Tipos  --------------Probable marca no reachable
     @_('INT', 'FLOAT', 'CHAR')
     def tipos(self, p):
+        self.var_type = p[-1]
         pass
+
+    @_('')
+    def var_accion(self, p):
+        # print("Agregando", p[-1])    
+        semantica.addSemantic(semantica.scope, self.var_type, p[-1], 0)
 
     #Main --------------Faltan los diagramas
     @_('MAIN "{" estatuto mainfuncion2 "}"')
@@ -124,12 +130,12 @@ class Duck2020Parser(Parser):
         pass
 
     #Fucion
-    @_('funcionvoid', 'funciontipo')
+    @_('funciontipo', 'funcionvoid')
     def funcion(self, p):
         pass
 
     #FuncionVoid
-    @_('VOID MODULE ID "(" funcionvoid2 ")" vars "{" estatuto funcionvoid4 "}"', 'VOID MODULE ID "(" funcionvoid2 ")" "{" estatuto funcionvoid4 "}"')
+    @_('VOID MODULE ID funcion_accion "(" funcionvoid2 ")" vars "{" estatuto funcionvoid4 "}"', 'VOID MODULE ID funcion_accion "(" funcionvoid2 ")" "{" estatuto funcionvoid4 "}"')
     def funcionvoid(self, p):
         pass
 
@@ -145,8 +151,8 @@ class Duck2020Parser(Parser):
     def funcionvoid4(self, p):
         pass
 
-    #FuncionTipo
-    @_('tipos MODULE ID "(" funciontipo2 ")" vars "{" estatuto funciontipo4 RETURN expresion "}"', 'tipos MODULE ID "(" funcionvoid2 ")" "{" estatuto funciontipo4 "}"')
+    #FuncionTipo ----------------------------Checar regla
+    @_('tipos MODULE ID funcion_accion2 "(" funciontipo2 ")" vars "{" estatuto funciontipo4 RETURN expresion "}"', 'tipos MODULE ID funcion_accion2 "(" funciontipo2 ")" "{" estatuto funciontipo4 RETURN expresion "}"')
     def funciontipo(self, p):
         pass
 
@@ -166,6 +172,22 @@ class Duck2020Parser(Parser):
     @_('tipos expresion')
     def parametro(self, p):
         pass
+
+    @_('')
+    def funcion_accion(self, p):
+        # print("Agregando funcion", p[-1])
+        # self.var_type = p[-3]
+        # semantica.scope = "func" + str(p[-1])
+        # semantica.addSemantic(semantica.scope, self.var_type, p[-1], 0)
+        pass
+
+    @_('')
+    def funcion_accion2(self, p):
+        # print("Agregando funcion", p[-1])
+        # semantica.scope = "func" + str(p[-1])
+        # semantica.addSemantic(semantica.scope, self.var_type, p[-1], 0)
+        pass
+    
 
     #Estatuto
     @_('lectura', 'escritura', 'asignacion', 'decision', 'repeticion', 'funcionesp')
@@ -317,6 +339,7 @@ if __name__ == '__main__':
             # for line in file:
             #     result = parser.parse(lexer.tokenize(line.strip()))
             #     print(result)
+            # print(semantica.semanticv)
 
         except EOFError:
             break
@@ -335,6 +358,7 @@ if __name__ == '__main__':
 
     # lexer = Duck2020Lexer()
     # parser = Duck2020Parser()
+    # semantica = semantic()
     # result = parser.parse(lexer.tokenize(masterline))
     # print(result)
     # # while True:
